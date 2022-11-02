@@ -1,0 +1,1 @@
+web: gunicorn dataScrapping.wsgi:application --log-file -
