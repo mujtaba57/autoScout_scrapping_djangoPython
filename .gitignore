@@ -1,6 +1,7 @@
 /.idea/.gitignore
 /venv/*
 *.js.gz
+data/*
 /scrappingApp/.~lock.clean_data.csv#
 /scrappingApp/migrations/0001_initial.py
 /staticfiles/admin/js/actions.eac7e3441574.js
@@ -407,3 +408,21 @@
 /staticfiles/admin/js/vendor/select2/i18n/zh-TW.04554a227c2b.js
 /staticfiles/admin/js/vendor/select2/i18n/zh-TW.js
 /staticfiles/admin/js/vendor/select2/i18n/zh-TW.js.gz
+<<<<<<< HEAD
+
+=======
+/data/mysql/db/auto.cnf
+/data/mysql/db/ca.pem
+/data/mysql/db/ca-key.pem
+/data/mysql/db/client-cert.pem
+/data/mysql/db/client-key.pem
+/data/mysql/db/ib_buffer_pool
+/data/mysql/db/ib_logfile0
+/data/mysql/db/ib_logfile1
+/data/mysql/db/ibdata1
+/data/mysql/db/mysql.sock
+/data/mysql/db/private_key.pem
+/data/mysql/db/public_key.pem
+/data/mysql/db/server-cert.pem
+/data/mysql/db/server-key.pem
+>>>>>>> 6622ac9... add files

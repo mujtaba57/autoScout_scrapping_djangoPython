@@ -1,6 +1,16 @@
 from django.db import models
+
+
+class NameField(models.CharField):
+    def __init__(self, *args, **kwargs):
+        super(NameField, self).__init__(*args, **kwargs)
+    def get_prep_value(self, value):
+        return str(value).lower()
+
+
 class CarDetail(models.Model):
     carModel = models.CharField(max_length=500)
+    carImage = models.TextField()
     carMileage = models.CharField(max_length=500)
     carRegistration = models.CharField(max_length=500)
     carPower = models.CharField(max_length=500)
@@ -32,6 +42,5 @@ class CarDetail(models.Model):
 
     def __str__(self):
         return self.carModel
-
 
 
