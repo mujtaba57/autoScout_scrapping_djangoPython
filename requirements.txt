@@ -3,7 +3,6 @@ asttokens
 async-generator
 attrs
 backcall
-backports.zoneinfo
 beautifulsoup4
 certifi
 charset-normalizer
@@ -68,4 +67,4 @@ webencodings
 websockets
 wget
 whitenoise
-wsproto==1.2.0
+wsproto
