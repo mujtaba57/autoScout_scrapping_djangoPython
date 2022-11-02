@@ -84,3 +84,10 @@ class LinkScrapTime(models.Model):
     startTime = models.TimeField(default=datetime.time(0, 00))
     endTime = models.TimeField(default=datetime.time(8, 00))
 
+class LinkScrapTime(models.Model):
+    nameIndex = models.TextField(
+        default="This time refers to the start and end, the execution time to scrape car links")
+
+    startTime = models.TimeField()
+    endTime = models.TimeField()
+
