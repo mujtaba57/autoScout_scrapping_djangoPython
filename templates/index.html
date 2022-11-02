@@ -22,7 +22,8 @@
                     <div class="row mt-5">
                         <div class="col-4">
                             <label class="my-1">Models</label>
-                            <select class="form-select" aria-label="Default select example" name="type">
+                            <select class="form-select" aria-label="Default select example" name="type" required>
+                                <option selected></option>
                                 {% for name in models_name %}
                                     <option value={{name}}>{{name}}</option>
                                 {% endfor %}
@@ -31,21 +32,21 @@
                         <div class="col-4 d-inline-flex">
                             <div class="form-outline mx-1 w-50">
                                 <label class="my-1">From Price</label>
-                                <input type="number" min="1000" max="2000000" step="500" name="fromprice" class="form-control"/>
+                                <input type="number" min="0" max="2000000" step="500" name="fromprice" class="form-control"/>
                             </div>
                             <div class="form-outline mx-1 w-50">
                                 <label class="my-1">To Price</label>
-                                <input type="number" min="1000" max="2000000" step="500" name="toprice" class="form-control"/>
+                                <input type="number" min="0" max="2000000" step="500" name="toprice" class="form-control"/>
                             </div>
                         </div>
                         <div class="col-4 d-inline-flex">
                             <div class="form-outline mx-1 w-50">
                                 <label class="my-1">From Registration</label>
-                                <input type="number" min="1950" max="2022" step="1" name="fromfr" class="form-control"/>
+                                <input type="number" min="1950" max="2022" step="1" name="fromfr" class="form-control" required/>
                             </div>
                             <div class="form-outline mx-1 w-50">
                                 <label class="my-1">To Registration</label>
-                                <input type="number" min="1950" max="2022" step="1" name="tofr" class="form-control"/>
+                                <input type="number" min="1950" max="2022" step="1" name="tofr" class="form-control" required/>
                             </div>
                         </div>
                     </div>
@@ -53,17 +54,18 @@
                         <div class="col-4 d-inline-flex">
                             <div class="form-outline mx-1 w-50">
                                 <label class="my-1">From Mileage</label>
-                                <input type="number" min="1000" max="2000000" step="500" name="frommile" class="form-control"/>
+                                <input type="number" min="0.0" max="2000000.0" step="100" name="frommile" class="form-control" required/>
                             </div>
                             <div class="form-outline mx-1 w-50">
                                 <label class="my-1">To Mileage</label>
-                                <input type="number" min="1000" max="2000000" step="500" name="tomile" class="form-control"/>
+                                <input type="number" min="0.0" max="2000000.0" step="100" name="tomile" class="form-control" required/>
                             </div>
                         </div>
                         <div class="col-4">
                             <label class="my-1">Engine Type</label>
                             <select class="form-select" aria-label="Default select example" name="engine_type">
-                                <option value="gasoline" selected>Gasoline</option>
+                                <option selected></option>
+                                <option value="gasoline">Gasoline</option>
                                 <option value="diesel">Diesel</option>
                                 <option value="ethanol">Ethanol</option>
                                 <option value="electric">Electric</option>
@@ -89,6 +91,7 @@
                         <div class="col-4">
                             <label class="my-1">Country</label>
                             <select class="form-select" aria-label="Default select example" name="country">
+                                <option selected></option>
                                 <option value="Afghanistan">Afghanistan</option>
                                 <option value="Albania">Albania</option>
                                 <option value="Algeria">Algeria</option>
