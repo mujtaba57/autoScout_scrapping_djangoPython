@@ -1,7 +1,7 @@
 from .models import CarDetail
 import pandas as pd
 
-df = pd.read_csv("/final_data.csv")
+df = pd.read_csv("scrappingApp/clean_data.csv")
 
 for i in range(0, len(df)):
     CarDetail.objects.create(

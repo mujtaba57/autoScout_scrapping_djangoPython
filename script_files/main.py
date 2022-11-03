@@ -12,5 +12,4 @@ def getMakeModel():
         if val != "":
             nameCarVal.append(val)
             nameCar.append(option.text)
-
     return nameCarVal, nameCar
