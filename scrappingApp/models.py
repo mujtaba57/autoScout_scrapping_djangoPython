@@ -1,5 +1,4 @@
 from django.db import models
-import pandas as pd
 
 
 class NameField(models.CharField):
@@ -44,16 +43,4 @@ class CarDetail(models.Model):
     def __str__(self):
         return self.carModel
 
-
-class CarMake(models.Model):
-    carMakeName = NameField(unique=True, max_length=500)
-
-    def __str__(self):
-        return str(self.carMakeName).lower()
-class CarModelDetail(models.Model):
-    carMakeName = models.ForeignKey(CarMake, related_name="car_make_name", on_delete=models.PROTECT)
-    carModelList = NameField(max_length=500)
-
-    def __str__(self):
-        return self.carMakeName
 
