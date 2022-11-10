@@ -1,8 +1,8 @@
-from models import CarDetail
+from .models import CarDetail
 import pandas as pd
 
-df = pd.read_csv("../scrappingApp/allCarInfo1000.csv")
-
+df = pd.read_csv("csv_files/clean_data150R.csv")
+print(len(df))
 for i in range(0, len(df)):
     CarDetail.objects.create(
         carModel=df['Unnamed: 0'][i], carMileage=df['mileage'][i], carRegistration=df['first registration'][i],
@@ -17,5 +17,4 @@ for i in range(0, len(df)):
         carContactNumber=df['contact_number'][i], carContactAddress=df['contact_address'][i],
         carCompanyName=df['company_name'][i]
     )
-
 

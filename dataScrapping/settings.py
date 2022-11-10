@@ -79,11 +79,17 @@ WSGI_APPLICATION = 'dataScrapping.wsgi.application'
 
 DATABASES = {
     'default': {
+        # 'ENGINE': 'django.db.backends.postgresql',
+        # 'NAME': 'd3103jq8cbpt3q',
+        # 'USER': 'kjqwwuihnruqme',
+        # 'PASSWORD': '3b2eb99414b9914f147b95e677f0a079682e309f5db14b55d5058d7a6144e959',
+        # 'HOST': 'ec2-54-163-34-107.compute-1.amazonaws.com',
+        # 'PORT': '5432',
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'd3103jq8cbpt3q',
-        'USER': 'kjqwwuihnruqme',
-        'PASSWORD': '3b2eb99414b9914f147b95e677f0a079682e309f5db14b55d5058d7a6144e959',
-        'HOST': 'ec2-54-163-34-107.compute-1.amazonaws.com',
+        'NAME': 'scrapping_data',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': '127.0.0.1',
         'PORT': '5432',
     }
 }

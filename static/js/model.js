@@ -4,4 +4,6 @@ $(document).ready(function() {
         removeItemButton: true,
         maxItemCount:3
       });
+
+
  });
