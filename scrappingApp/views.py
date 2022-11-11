@@ -81,7 +81,7 @@ def result(request):
             if result:
                 if len(result) > int(maximum_target):
                     return render(request, "index.html",
-                                  {"result": result[0:maximum_target], "models_name": modelNameList, "model_values": model_values})
+                                  {"result": result, "models_name": modelNameList, "model_values": model_values})
                 else:
                     return render(request, "index.html",
                                   {"result": result, "models_name": modelNameList, "model_values": model_values})
