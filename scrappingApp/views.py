@@ -78,13 +78,11 @@ def result(request):
             else:
                 result = result
 
+
             if result:
-                if len(result) > int(maximum_target):
-                    return render(request, "index.html",
-                                  {"result": result, "models_name": modelNameList, "model_values": model_values})
-                else:
-                    return render(request, "index.html",
-                                  {"result": result, "models_name": modelNameList, "model_values": model_values})
+                return render(request, "index.html",
+                              {"result": result, "models_name": modelNameList, "model_values": model_values,
+                               "max_target": maximum_target})
             else:
                 result = CarDetail.objects.filter(
                     Q(carModel__contains=make.lower())
@@ -100,14 +98,16 @@ def result(request):
                 if result:
                     msg = "Other Related Data"
                     return render(request, "index.html",
-                                  {"result": result, "msg": msg,  "models_name": modelNameList, "model_values": model_values})
+                                  {"result": result, "msg": msg,  "models_name": modelNameList,
+                                   "model_values": model_values,
+                                   "max_target": maximum_target})
                 else:
                     msg = "Not Found Data"
                     return render(request, "index.html",
                                   {"result": result, "msg": msg, "models_name": modelNameList,
-                                   "model_values": model_values})
+                                   "model_values": model_values, "max_target": maximum_target})
 
-    except Exception as e:
+    except:
         msg = "Bad Request Error"
         return render(request, "index.html",
                       {"msg": msg, "models_name": modelNameList, "model_values": model_values})
