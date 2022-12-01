@@ -1,5 +1,6 @@
 from django.db import models
-
+from django.utils import timezone
+from datetime import datetime
 
 class NameField(models.CharField):
     def __init__(self, *args, **kwargs):
@@ -43,4 +44,20 @@ class CarDetail(models.Model):
     def __str__(self):
         return self.carModel
 
+class CarDataIndex(models.Model):
+    queryIndex = models.IntegerField()
+    modify_time = models.DateTimeField()
+
+    def __str__(self):
+        return str(self.queryIndex)
+
+class DetailScrapExecutionTime(models.Model):
+    startTime = models.TimeField()
+    endTime = models.TimeField()
+
+class AllCarLink(models.Model):
+    link = models.TextField()
+
+    def __str__(self):
+        return self.link
 
