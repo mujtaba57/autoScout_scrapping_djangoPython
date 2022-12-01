@@ -1,6 +1,8 @@
 /.idea/.gitignore
 /venv/*
 *.js.gz
+/scrappingApp/migrations/*
+/data/mysql/*
 /scrappingApp/.~lock.clean_data.csv#
 /scrappingApp/migrations/0001_initial.py
 /staticfiles/admin/js/actions.eac7e3441574.js
