@@ -16,18 +16,16 @@ def index(request):
 def result(request):
     try:
         if request.method == "POST":
-            make = request.POST['cmake'].lower()
-            model = request.POST['cmodel'].lower()
-            cartype = request.POST['cartype'].lower()
+            make = request.POST['cmake']
+            model = request.POST.get('cmodel', False)
+            cartype = request.POST['cartype']
 
             fromprices = request.POST['fromprice']
             toprice = request.POST['toprice']
 
-            fromfr = request.POST['fromfr']
-            tofr = request.POST['tofr']
+            reg = request.POST['registration']
 
-            frommile = request.POST['frommile']
-            tomile = request.POST['tomile']
+            mileage = request.POST['mileage']
 
             engine_type = request.POST['engine_type']
 
@@ -35,17 +33,17 @@ def result(request):
             topower = request.POST['topower']
 
             sort_id = request.POST["sort_by"]
-            country_list = request.POST['country[]'].lower()
-            maximum_target = int(request.POST['max_cat'])
+            country_list = request.POST.getlist('country', "germany")
+            maximum_target = request.POST['max_cat']
 
             if model:
                 result = CarDetail.objects.filter(
-                        Q(carModel__contains=make) & Q(carModel__contains=model) & Q(countryName__contains=country_list)
-                        & Q(carType__contains=cartype) &
-                        Q(carRegistration__range=(fromfr, tofr)) & Q(carMileage__range=(frommile, tomile))
+                        Q(carModel__contains=make.lower()) & Q(carModel__contains=model.lower())
+                        & Q(carType__contains=cartype.lower()) & Q(countryName__contains=country_list[0].lower()) &
+                        Q(carRegistration__lte=reg) & Q(carMileage__lte=mileage)
                     ).values(
                         "carModel", "carMileage", "carRegistration", "carPower", "carGearbox", "carEngine", "carGears",
-                        "carFuelType",
+                        "carFuelType", "carImage",
                         "carFuelConsumption", "carEmissions", "carColor", "carManColor", "carBodyType", "carType", "carSeats",
                         "carDoors", "countryName", "carOfferNumber", "carModelCode", "carPreviousOwner", "carrEmissionClass",
                         "carNonSmoker",
@@ -53,42 +51,63 @@ def result(request):
                         "carCompanyName")
             else:
                 result = CarDetail.objects.filter(
-                    Q(carModel__contains=make) & Q(countryName__contains=country_list)
-                    & Q(carType__contains=cartype) &
-                    Q(carRegistration__range=(fromfr, tofr)) & Q(carMileage__range=(frommile, tomile))
+                    Q(carModel__contains=make.lower())
+                    & Q(carType__contains=cartype.lower()) & Q(countryName__contains=country_list[0].lower()) &
+                    Q(carRegistration__lte=reg) & Q(carMileage__lte=mileage)
                 ).values(
                     "carModel", "carMileage", "carRegistration", "carPower", "carGearbox", "carEngine", "carGears",
-                    "carFuelType",
+                    "carFuelType", "carImage",
                     "carFuelConsumption", "carEmissions", "carColor", "carManColor", "carBodyType", "carType", "carSeats",
                     "carDoors", "countryName", "carOfferNumber", "carModelCode", "carPreviousOwner", "carrEmissionClass",
                     "carNonSmoker",
                     "carPrice", "carVAT", "carEquipment", "carContactName", "carContactNumber", "carContactAddress",
                     "carCompanyName")
 
-            if result:
-                if sort_id == "1":
-                    result = sorted(result, key=lambda d: d['carPrice'], reverse=True)
-                elif sort_id ==  "2":
-                    result = sorted(result, key=lambda d: d['carPrice'], reverse=False)
-                elif sort_id ==  "3":
-                    result = sorted(result, key=lambda d: d['carMileage'], reverse=True)
-                elif sort_id ==  "4":
-                    result = sorted(result, key=lambda d: d['carMileage'], reverse=False)
-                elif sort_id ==  "5":
-                    result = sorted(result, key=lambda d: d['carRegistration'], reverse=True)
-                elif sort_id ==  "6":
-                    result = sorted(result, key=lambda d: d['carRegistration'], reverse=False)
-                print(result)
-                if len(result) > maximum_target:
-                    return render(request, "index.html",
-                                  {"result": result[0:maximum_target], "models_name": modelNameList, "model_values": model_values})
-                else:
-                    return render(request, "index.html",
-                                  {"result": result, "models_name": modelNameList, "model_values": model_values})
+            if sort_id == "1":
+                result = sorted(result, key=lambda d: d['carPrice'])
+            elif sort_id == "2":
+                result = sorted(result, key=lambda d: d['carPrice'], reverse=True)
+            elif sort_id == "3":
+                result = sorted(result, key=lambda d: d['carMileage'])
+            elif sort_id == "4":
+                result = sorted(result, key=lambda d: d['carMileage'], reverse=True)
+            elif sort_id == "5":
+                result = sorted(result, key=lambda d: d['carRegistration'])
+            elif sort_id == "6":
+                result = sorted(result, key=lambda d: d['carRegistration'], reverse=True)
             else:
-                result = ""
+                result = result
+
+
+            if result:
                 return render(request, "index.html",
-                              {"result": result, "models_name": modelNameList, "model_values": model_values})
-    except Exception as e:
+                              {"result": result, "models_name": modelNameList, "model_values": model_values,
+                               "max_target": maximum_target})
+            else:
+                result = CarDetail.objects.filter(
+                    Q(carModel__contains=make.lower())
+                     & Q(countryName__contains=country_list[0].lower())
+                ).values(
+                    "carModel", "carMileage", "carRegistration", "carPower", "carGearbox", "carEngine", "carGears",
+                    "carFuelType", "carImage",
+                    "carFuelConsumption", "carEmissions", "carColor", "carManColor", "carBodyType", "carType", "carSeats",
+                    "carDoors", "countryName", "carOfferNumber", "carModelCode", "carPreviousOwner", "carrEmissionClass",
+                    "carNonSmoker",
+                    "carPrice", "carVAT", "carEquipment", "carContactName", "carContactNumber", "carContactAddress",
+                    "carCompanyName")
+                if result:
+                    msg = "Other Related Data"
+                    return render(request, "index.html",
+                                  {"result": result, "msg": msg,  "models_name": modelNameList,
+                                   "model_values": model_values,
+                                   "max_target": maximum_target})
+                else:
+                    msg = "Not Found Data"
+                    return render(request, "index.html",
+                                  {"result": result, "msg": msg, "models_name": modelNameList,
+                                   "model_values": model_values, "max_target": maximum_target})
+
+    except:
+        msg = "Bad Request Error"
         return render(request, "index.html",
-                      {"result": e.args[0], "models_name": modelNameList, "model_values": model_values})
+                      {"msg": msg, "models_name": modelNameList, "model_values": model_values})
