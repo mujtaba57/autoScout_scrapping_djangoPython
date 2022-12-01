@@ -409,3 +409,5 @@
 /staticfiles/admin/js/vendor/select2/i18n/zh-TW.04554a227c2b.js
 /staticfiles/admin/js/vendor/select2/i18n/zh-TW.js
 /staticfiles/admin/js/vendor/select2/i18n/zh-TW.js.gz
+dataScrapping/__pycache__/*
+
