@@ -1,6 +1,4 @@
 from django.db import models
-from django.utils import timezone
-from datetime import datetime
 
 class NameField(models.CharField):
     def __init__(self, *args, **kwargs):
