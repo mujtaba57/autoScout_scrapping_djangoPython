@@ -1,7 +1,6 @@
 from django.contrib import admin
 from .models import CarDetail, CarDataIndex, DetailScrapExecutionTime, AllCarLink
 
-admin.site.register(AllCarLink)
 @admin.register(CarDetail)
 class CarDataIndexAdmin(admin.ModelAdmin):
     list_display = (
@@ -30,3 +29,10 @@ class DetailScrapExecutionTimeAdmin(admin.ModelAdmin):
     )
     def has_delete_permission(self, request, object=None):
         return False
+
+@admin.register(AllCarLink)
+class AllCarLinkAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "link"
+    )
