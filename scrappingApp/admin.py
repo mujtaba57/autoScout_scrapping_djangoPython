@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CarDetail, CarDataIndex, DetailScrapExecutionTime, AllCarLink
+from .models import CarDetail, CarDataIndex, DataScrapTime, CarLink, LinksIndex, LinkScrapTime
 
 @admin.register(CarDetail)
 class CarDataIndexAdmin(admin.ModelAdmin):
@@ -11,7 +11,9 @@ class CarDataIndexAdmin(admin.ModelAdmin):
     )
 @admin.register(CarDataIndex)
 class CarDataIndexAdmin(admin.ModelAdmin):
+    readonly_fields = ("nameIndex",)
     list_display = (
+        "nameIndex",
         "queryIndex",
         "modify_time"
     )
@@ -21,18 +23,50 @@ class CarDataIndexAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, object=None):
         return False
 
-@admin.register(DetailScrapExecutionTime)
-class DetailScrapExecutionTimeAdmin(admin.ModelAdmin):
+@admin.register(DataScrapTime)
+class DataScrapTimeAdmin(admin.ModelAdmin):
+    readonly_fields = ("nameIndex",)
     list_display = (
         "startTime",
         "endTime"
     )
+    def has_add_permission(self, request, object=None):
+        return False
     def has_delete_permission(self, request, object=None):
         return False
 
-@admin.register(AllCarLink)
-class AllCarLinkAdmin(admin.ModelAdmin):
+@admin.register(CarLink)
+class CarLinkAdmin(admin.ModelAdmin):
     list_display = (
         "id",
-        "link"
+        "carlinks"
     )
+
+@admin.register(LinksIndex)
+class LinksIndexAdmin(admin.ModelAdmin):
+    readonly_fields = ("nameIndex",)
+    list_display = (
+        "nameIndex",
+        "yearQueryIndex",
+        "priceQueryIndex",
+        "carNameQueryIndex",
+        "modify_time"
+    )
+    def has_add_permission(self, request, object=None):
+        return False
+
+    def has_delete_permission(self, request, object=None):
+        return False
+
+@admin.register(LinkScrapTime)
+class LinkScrapTimeAdmin(admin.ModelAdmin):
+    readonly_fields = ("nameIndex",)
+    list_display = (
+        "startTime",
+        "endTime"
+    )
+
+    def has_add_permission(self, request, object=None):
+        return False
+    def has_delete_permission(self, request, object=None):
+        return False
