@@ -8,19 +8,16 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support.ui import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 from datetime import datetime
-from datetime import datetime
 import pytz
 import json
-from scrap_links import scrap_links_only
 import sys, os, django
-
 sys.path.append("/path/to/dataScrapping")
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "dataScrapping.settings")
 django.setup()
 
-from scrappingApp.models import CarDetail, CarDataIndex, DetailScrapExecutionTime, AllCarLink
+from scrappingApp.models import CarDetail, CarDataIndex, DataScrapTime, CarLink
 
-execution_time = DetailScrapExecutionTime.objects.filter().values_list("startTime", "endTime")
+execution_time = DataScrapTime.objects.filter().values_list("startTime", "endTime")
 start_execution_time, end_execution_time = execution_time[0][0], execution_time[0][1]
 
 all_car_info = []
@@ -84,12 +81,10 @@ def scrap_data(link):
     car_data = {}
     feature_data = []
     driver.get(link.format())
-
     try:
         try:
-            WebDriverWait(driver, 20).until(
-                EC.frame_to_be_available_and_switch_to_it((By.XPATH, '//*[@id="gdpr-consent-notice"]')))
-            WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="save"]'))).click()
+            iframe = driver.find_element(By.XPATH, '//*[@id="as24-cmp-popup"]')
+            driver.execute_script("arguments[0].remove();", iframe)
         except Exception:
             pass
         car_image, new_data = [], []
@@ -101,7 +96,6 @@ def scrap_data(link):
                                                                                      "#__next > div > div > main > div.StageArea_container__YuNIp > div.StageArea_informationContainer__VaFP8 > div.Price_mainPriceContainer__syzQE > div:nth-child(1) > div.PriceInfo_styledPriceRow__2fvRD > div > span"))).text
         car_data["price"], car_data["VAT"] = carprice.split("-")
 
-        time.sleep(5)
         imgs_div = driver.find_elements(By.CSS_SELECTOR,
                                         "#__next > div > div > main > div.StageArea_container__YuNIp > div.Gallery_gallery__MDr8S > div > div > div.image-gallery-thumbnails-wrapper.bottom.thumbnails-swipe-horizontal > div > div > button > img")
         for elem in imgs_div:
@@ -109,27 +103,30 @@ def scrap_data(link):
             car_image.append(car_ind_link)
 
         car_data["image"] = car_image
-
         time.sleep(5)
-        WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR,
-                                                                          f"#__next > div > div > main > div.DetailPage_slicesContainer__wHHae > div > div > div.DetailsSection_childrenSection__NQLD7 > button"))).click()
-        equipment_value = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR,
-                                                                                            f"#__next > div > div > main > div.DetailPage_slicesContainer__wHHae > div > div > div.DetailsSection_childrenSection__NQLD7 > div > dl > dd > ul"))).text
-        car_data["equipment"] = equipment_value.lower()
+        try:
+            WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR,
+                                                                              f"#__next > div > div > main > div.DetailPage_slicesContainer__wHHae > div > div > div.DetailsSection_childrenSection__NQLD7 > button"))).click()
+            equipment_value = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR,
+                                                                                                f"#__next > div > div > main > div.DetailPage_slicesContainer__wHHae > div > div > div.DetailsSection_childrenSection__NQLD7 > div > dl > dd > ul"))).text
+            car_data["equipment"] = equipment_value.lower()
 
-        contactName = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR,
-                                                                                        f"#__next > div > div > main > div.DetailPage_slicesContainer__wHHae > div.VendorAndCtaSection_container__ivfyv > div > div.VendorData_mainContainer__AWyih > div.VendorData_bodyContainer__sJZZC > div.Contact_container__TYO5v > span.Contact_contactName__MFXhS"))).text
-        contactNumber = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR,
-                                                                                          f"#__next > div > div > main > div.DetailPage_slicesContainer__wHHae > div.VendorAndCtaSection_container__ivfyv > div > div.VendorData_mainContainer__AWyih > div.VendorData_bodyContainer__sJZZC > div.Contact_container__TYO5v > div > a"))).text
-        contactAddress = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR,
-                                                                                           f"#__next > div > div > main > div.DetailPage_slicesContainer__wHHae > div.VendorAndCtaSection_container__ivfyv > div > div.VendorData_mainContainer__AWyih > div.VendorData_bodyContainer__sJZZC > div.Department_openingHoursContainer__VP9fd > div.Department_departmentContainer__uYING > a > div"))).text
-        companyName = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR,
-                                                                                        f"#__next > div > div > main > div.DetailPage_slicesContainer__wHHae > div.VendorAndCtaSection_container__ivfyv > div > div.VendorData_mainContainer__AWyih > div.VendorData_bodyContainer__sJZZC > div.RatingsAndCompanyName_container__9_HA4 > div.RatingsAndCompanyName_dealer__HTXk_ > div:nth-child(1)"))).text
 
-        car_data["contact_name"] = contactName.lower()
-        car_data["contact_number"] = contactNumber.lower()
-        car_data["contact_address"] = contactAddress.lower()
-        car_data["company_name"] = companyName.lower()
+            contactName = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR,
+                                                                                            f"#__next > div > div > main > div.DetailPage_slicesContainer__wHHae > div.VendorAndCtaSection_container__ivfyv > div > div.VendorData_mainContainer__AWyih > div.VendorData_bodyContainer__sJZZC > div.Contact_container__TYO5v > span.Contact_contactName__MFXhS"))).text
+            contactNumber = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR,
+                                                                                              f"#__next > div > div > main > div.DetailPage_slicesContainer__wHHae > div.VendorAndCtaSection_container__ivfyv > div > div.VendorData_mainContainer__AWyih > div.VendorData_bodyContainer__sJZZC > div.Contact_container__TYO5v > div > a"))).text
+            contactAddress = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR,
+                                                                                               f"#__next > div > div > main > div.DetailPage_slicesContainer__wHHae > div.VendorAndCtaSection_container__ivfyv > div > div.VendorData_mainContainer__AWyih > div.VendorData_bodyContainer__sJZZC > div.Department_openingHoursContainer__VP9fd > div.Department_departmentContainer__uYING > a > div"))).text
+            companyName = WebDriverWait(driver, 20).until(EC.visibility_of_element_located((By.CSS_SELECTOR,
+                                                                                            f"#__next > div > div > main > div.DetailPage_slicesContainer__wHHae > div.VendorAndCtaSection_container__ivfyv > div > div.VendorData_mainContainer__AWyih > div.VendorData_bodyContainer__sJZZC > div.RatingsAndCompanyName_container__9_HA4 > div.RatingsAndCompanyName_dealer__HTXk_ > div:nth-child(1)"))).text
+
+            car_data["contact_name"] = contactName.lower()
+            car_data["contact_number"] = contactNumber.lower()
+            car_data["contact_address"] = contactAddress.lower()
+            car_data["company_name"] = companyName.lower()
+        except Exception:
+            pass
 
         for i in range(0, 11):
             try:
@@ -198,26 +195,26 @@ def scrap_data(link):
 
 
 def main_function():
-    car_link_df = pd.read_csv("./csv_files/car_links.csv")
-
+    car_link_df = pd.DataFrame.from_records(
+        CarLink.objects.filter().values_list("link"), columns=["car_links"]
+    )
     while True:
         start_time = start_execution_time()
         if start_time == 1:
             car_link_index = CarDataIndex.objects.filter().values_list("queryIndex")
-            for index, link in enumerate(car_link_df.car_links[:car_link_index[0][0]]):
+            print("index: ", car_link_index[0][0])
+            for index, link in enumerate(car_link_df.car_links[car_link_index[0][0]:]):
                 endtime = end_execution_time()
                 if endtime >= 1:
                     scrap_data(link)
                 else:
-                    CarDataIndex.objects.update(queryIndex=int(index), modify_time=datetime.now(), id=1)
                     driver.quit()
                     add_car_data_to_db()
+                    print(int(index)+int(car_link_index))
+                    CarDataIndex.objects.update(queryIndex=int(index)+int(car_link_index), modify_time=datetime.now(), id=1)
                     break
-        else:
-            print("link scrapping: ")
-            scrap_links_only()
-
         time.sleep(1)
         print("delay_time: ", start_time)
+
 
 main_function()
