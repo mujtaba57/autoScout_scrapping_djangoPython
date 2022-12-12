@@ -81,9 +81,11 @@ def start_execution_time_func():
 
 
 def add_links_to_db(df):
+    db_links_list = CarLink.objects.all().values_list("carlinks")
     for i in range(0, len(df)):
         try:
-            CarLink.objects.create(carlinks=df["car_links"][i])
+            if df["car_links"][i] not in db_links_list:
+                CarLink.objects.create(carlinks=df["car_links"][i])
         except Exception:
             pass
 
@@ -124,35 +126,45 @@ def scrap_links_only(year, price, name):
 def main_function():
     while True:
         start_time = start_execution_time_func()
-        if start_time == 1:
+        executed_year_index, executed_price_index, executed_name_index = 0, 0, 0
+        endtime = end_execution_time_func()
+        if start_time == 1 and endtime >= 1:
             link_list = []
             links_list = LinksIndex.objects.filter().values_list("yearQueryIndex", "priceQueryIndex", "carNameQueryIndex")
             years_index, price_index, car_index = links_list[0][0], links_list[0][1], links_list[0][2]
             for index_year, year in enumerate(yearCarVal[years_index:]):
                 endtime = end_execution_time_func()
                 if endtime >= 1:
-                    for price_index, price in enumerate(priceCarVal[price_index:]):
+                    for index_price, price in enumerate(priceCarVal[price_index:]):
                         endtime = end_execution_time_func()
                         if endtime >= 1:
-                            for car_index, name in enumerate(nameCar[car_index:]):
+                            for index_car, name in enumerate(nameCar[car_index:]):
+                                executed_year_index = (index_year + years_index)
+                                executed_price_index = (index_price + price_index)
+                                executed_name_index = (index_car + car_index)
                                 endtime = end_execution_time_func()
                                 if endtime >= 1:
                                     link_data = scrap_links_only(year, price, name)
                                     link_list.extend(link_data)
                                 else:
-                                    link_df = pd.DataFrame(link_list, columns=["car_links"])
-                                    add_links_to_db(link_df)
-                                    LinksIndex.objects.update(yearQueryIndex=years_index,
-                                                              priceQueryIndex=price_index,
-                                                              carNameQueryIndex=car_index,
-                                                              modify_time=datetime.now(),
-                                                                id=1)
                                     break
                         else:
                             break
                 else:
+                    link_df = pd.DataFrame(link_list, columns=["car_links"])
+                    add_links_to_db(link_df)
+                    LinksIndex.objects.update(yearQueryIndex=executed_year_index,
+                                              priceQueryIndex=executed_price_index,
+                                              carNameQueryIndex=executed_name_index,
+                                              modify_time=datetime.now(),
+                                              id=1)
                     break
-
+            else:
+                LinksIndex.objects.update(yearQueryIndex=0,
+                                          priceQueryIndex=0,
+                                          carNameQueryIndex=0,
+                                          modify_time=datetime.now(),
+                                          id=1)
         time.sleep(1)
         print("delay_time: ", start_time)
 

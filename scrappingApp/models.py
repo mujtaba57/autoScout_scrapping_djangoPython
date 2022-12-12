@@ -86,3 +86,4 @@ class LinkScrapTime(models.Model):
 
     startTime = models.TimeField()
     endTime = models.TimeField()
+

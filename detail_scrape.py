@@ -196,22 +196,21 @@ def scrap_data(link):
 
 def main_function():
     car_link_df = pd.DataFrame.from_records(
-        CarLink.objects.filter().values_list("link"), columns=["car_links"]
+        CarLink.objects.filter().values_list("carlinks"), columns=["car_links"]
     )
     while True:
         start_time = start_execution_time()
         if start_time == 1:
             car_link_index = CarDataIndex.objects.filter().values_list("queryIndex")
-            print("index: ", car_link_index[0][0])
             for index, link in enumerate(car_link_df.car_links[car_link_index[0][0]:]):
                 endtime = end_execution_time()
                 if endtime >= 1:
                     scrap_data(link)
                 else:
                     driver.quit()
+                    current_index = index + car_link_index[0][0]
                     add_car_data_to_db()
-                    print(int(index)+int(car_link_index))
-                    CarDataIndex.objects.update(queryIndex=int(index)+int(car_link_index), modify_time=datetime.now(), id=1)
+                    CarDataIndex.objects.update(queryIndex=current_index, modify_time=datetime.now(), id=1)
                     break
         time.sleep(1)
         print("delay_time: ", start_time)
