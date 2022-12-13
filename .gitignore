@@ -3,9 +3,10 @@
 *.js.gz
 /scrappingApp/migrations/*
 /data/mysql/*
-/scrappingApp/.~lock.clean_data.csv#
-/staticfiles/admin/*
+/staticfiles/*
 /.idea/*
 /scrappingApp/*.csv
 dataScrapping/__pycache__/*
+/scrappingApp/__pycache__/*
 */__pycache__/*
+*.csv

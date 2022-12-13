@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models.constraints import UniqueConstraint
 from django.db.models import Q
+import datetime
 class NameField(models.CharField):
     def __init__(self, *args, **kwargs):
         super(NameField, self).__init__(*args, **kwargs)
@@ -54,8 +55,8 @@ class CarDataIndex(models.Model):
 class DataScrapTime(models.Model):
     nameIndex = models.TextField(
         default="This time refers to the start and end, the execution time to scrape car detail data")
-    startTime = models.TimeField()
-    endTime = models.TimeField()
+    startTime = models.TimeField(default=datetime.time(10, 00))
+    endTime = models.TimeField(default=datetime.time(17, 00))
 
 class CarLink(models.Model):
     carlinks = models.TextField()
@@ -63,10 +64,6 @@ class CarLink(models.Model):
     def __str__(self):
         return self.carlinks
 
-    # class Meta:
-    #     constraints = [
-    #         UniqueConstraint(fields=['carlinks'], name='carlinks')
-    #     ]
 
 class LinksIndex(models.Model):
     nameIndex = models.TextField(default="Car link Scrapped Index")
@@ -84,6 +81,6 @@ class LinkScrapTime(models.Model):
     nameIndex = models.TextField(
         default="This time refers to the start and end, the execution time to scrape car links")
 
-    startTime = models.TimeField()
-    endTime = models.TimeField()
+    startTime = models.TimeField(default=datetime.time(0, 00))
+    endTime = models.TimeField(default=datetime.time(8, 00))
 

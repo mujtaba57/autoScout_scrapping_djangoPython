@@ -17,8 +17,8 @@ class CarDataIndexAdmin(admin.ModelAdmin):
         "queryIndex",
         "modify_time"
     )
-    # def has_add_permission(self, request, object=None):
-    #     return False
+    def has_add_permission(self, request, object=None):
+        return False
 
     def has_delete_permission(self, request, object=None):
         return False
@@ -30,8 +30,8 @@ class DataScrapTimeAdmin(admin.ModelAdmin):
         "startTime",
         "endTime"
     )
-    # def has_add_permission(self, request, object=None):
-    #     return False
+    def has_add_permission(self, request, object=None):
+        return False
     def has_delete_permission(self, request, object=None):
         return False
 
@@ -53,8 +53,8 @@ class LinksIndexAdmin(admin.ModelAdmin):
         "carNameQueryIndex",
         "modify_time"
     )
-    # def has_add_permission(self, request, object=None):
-    #     return False
+    def has_add_permission(self, request, object=None):
+        return False
 
     def has_delete_permission(self, request, object=None):
         return False
@@ -67,7 +67,7 @@ class LinkScrapTimeAdmin(admin.ModelAdmin):
         "endTime"
     )
 
-    # def has_add_permission(self, request, object=None):
-    #     return False
+    def has_add_permission(self, request, object=None):
+        return False
     def has_delete_permission(self, request, object=None):
         return False
