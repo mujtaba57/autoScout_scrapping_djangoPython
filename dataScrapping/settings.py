@@ -23,8 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-v0q%_wmhgf##1po1+g+7l#o)068ct8_=_!%r3mo8fyt_h5e^64'
 
+
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -32,6 +33,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'django_extensions',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -79,12 +81,18 @@ WSGI_APPLICATION = 'dataScrapping.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'd3103jq8cbpt3q',
-        'USER': 'kjqwwuihnruqme',
-        'PASSWORD': '3b2eb99414b9914f147b95e677f0a079682e309f5db14b55d5058d7a6144e959',
-        'HOST': 'ec2-54-163-34-107.compute-1.amazonaws.com',
-        'PORT': '5432',
+        # 'ENGINE': 'django.db.backends.postgresql',
+        # 'NAME': 'd3103jq8cbpt3q',
+        # 'USER': 'kjqwwuihnruqme',
+        # 'PASSWORD': '3b2eb99414b9914f147b95e677f0a079682e309f5db14b55d5058d7a6144e959',
+        # 'HOST': 'ec2-54-163-34-107.compute-1.amazonaws.com',
+        # 'PORT': '5432',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'carDataSchema',
+        'USER': 'root',
+        'PASSWORD': 'mysql12345',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     }
 }
 
@@ -115,9 +123,9 @@ LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
 
-USE_I18N = True
+USE_I18N = False
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)

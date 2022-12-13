@@ -1,6 +1,7 @@
 from django.db import models
-
-
+from django.db.models.constraints import UniqueConstraint
+from django.db.models import Q
+import datetime
 class NameField(models.CharField):
     def __init__(self, *args, **kwargs):
         super(NameField, self).__init__(*args, **kwargs)
@@ -34,7 +35,7 @@ class CarDetail(models.Model):
     carNonSmoker = models.CharField(max_length=500)
     carPrice = models.CharField(max_length=500)
     carVAT = models.CharField(max_length=500)
-    carEquipment = models.CharField(max_length=500)
+    carEquipment = models.TextField()
     carContactName = models.CharField(max_length=500)
     carContactNumber = models.CharField(max_length=500)
     carContactAddress = models.CharField(max_length=500)
@@ -43,4 +44,43 @@ class CarDetail(models.Model):
     def __str__(self):
         return self.carModel
 
+class CarDataIndex(models.Model):
+    nameIndex = models.TextField(default="Data Scraped Index")
+    queryIndex = models.IntegerField(default=0)
+    modify_time = models.DateTimeField()
+
+    def __str__(self):
+        return self.nameIndex
+
+class DataScrapTime(models.Model):
+    nameIndex = models.TextField(
+        default="This time refers to the start and end, the execution time to scrape car detail data")
+    startTime = models.TimeField(default=datetime.time(10, 00))
+    endTime = models.TimeField(default=datetime.time(17, 00))
+
+class CarLink(models.Model):
+    carlinks = models.TextField()
+
+    def __str__(self):
+        return self.carlinks
+
+
+class LinksIndex(models.Model):
+    nameIndex = models.TextField(default="Car link Scrapped Index")
+    yearQueryIndex = models.IntegerField(default=0)
+    priceQueryIndex = models.IntegerField(default=0)
+    carNameQueryIndex = models.IntegerField(default=0)
+    modify_time = models.DateTimeField()
+
+    def __str__(self):
+        return self.nameIndex
+
+
+
+class LinkScrapTime(models.Model):
+    nameIndex = models.TextField(
+        default="This time refers to the start and end, the execution time to scrape car links")
+
+    startTime = models.TimeField(default=datetime.time(0, 00))
+    endTime = models.TimeField(default=datetime.time(8, 00))
 
