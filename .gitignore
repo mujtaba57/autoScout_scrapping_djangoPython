@@ -8,5 +8,5 @@ data/*
 /scrappingApp/*.csv
 /dataScrapping/__pycache__/*
 /scrappingApp/__pycache__/*
-*/__pycache__/*
+/__pycache__/*
 *.csv

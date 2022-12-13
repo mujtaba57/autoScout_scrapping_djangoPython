@@ -88,7 +88,7 @@ DATABASES = {
         # 'HOST': 'ec2-54-163-34-107.compute-1.amazonaws.com',
         # 'PORT': '5432',
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'CarDataDB',
+        'NAME': 'carDataSchema',
         'USER': 'root',
         'PASSWORD': 'mysql12345',
         'HOST': '127.0.0.1',
