@@ -68,3 +68,4 @@ websockets
 wget
 whitenoise
 wsproto
+django-extensions

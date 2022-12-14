@@ -71,3 +71,39 @@ class LinkScrapTimeAdmin(admin.ModelAdmin):
         return False
     def has_delete_permission(self, request, object=None):
         return False
+
+@admin.register(CarLink)
+class CarLinkAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "carlinks"
+    )
+
+@admin.register(LinksIndex)
+class LinksIndexAdmin(admin.ModelAdmin):
+    readonly_fields = ("nameIndex",)
+    list_display = (
+        "nameIndex",
+        "yearQueryIndex",
+        "priceQueryIndex",
+        "carNameQueryIndex",
+        "modify_time"
+    )
+    # def has_add_permission(self, request, object=None):
+    #     return False
+
+    def has_delete_permission(self, request, object=None):
+        return False
+
+@admin.register(LinkScrapTime)
+class LinkScrapTimeAdmin(admin.ModelAdmin):
+    readonly_fields = ("nameIndex",)
+    list_display = (
+        "startTime",
+        "endTime"
+    )
+
+    def has_add_permission(self, request, object=None):
+        return False
+    def has_delete_permission(self, request, object=None):
+        return False
